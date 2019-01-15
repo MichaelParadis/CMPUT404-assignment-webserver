@@ -30,9 +30,21 @@ import socketserver
 class MyWebServer(socketserver.BaseRequestHandler):
     
     def handle(self):
-        self.data = self.request.recv(1024).strip()
-        print ("Got a request of: %s\n" % self.data)
-        self.request.sendall(bytearray("OK",'utf-8'))
+        self.data = self.request.recv(1024)
+        self.response_data = b""
+        print("Got a request of: %s\n" % self.data)
+        if not self.check_method():
+            self.response_data += bytearray("HTTP/1.0 405 Method Not Allowed\r\n\r\n", 'utf-8')
+            self.request.sendall(self.response_data)
+            return
+        self.request.sendall(bytearray("HTTP/1.0 200 OK\r\n\r\n", 'utf-8'))
+
+
+    """Checks the HTTP method will return false if the method is not allow"""
+    def check_method(self):
+        http_method = self.data.decode('utf-8').split()[0].upper()
+        return http_method == "GET"
+
 
 if __name__ == "__main__":
     HOST, PORT = "localhost", 8080
