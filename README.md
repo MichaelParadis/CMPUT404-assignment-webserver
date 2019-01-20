@@ -17,6 +17,7 @@ server.py contains contributions from:
 * Abram Hindle
 * Eddie Antonio Santos
 * Jackson Z Chang
+* Mandy Meindersma 
 * Michael Paradis
 
 But the server.py example is derived from the python documentation
